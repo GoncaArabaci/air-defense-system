@@ -10,7 +10,7 @@ def detect_shape(image):
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
     # Threshold değerini yükselt ve hassasiyeti artır
-    _, threshold = cv2.threshold(blurred, 150, 255, cv2.THRESH_BINARY_INV)
+    _, threshold = cv2.threshold(blurred, 150, 254, cv2.THRESH_BINARY_INV)
 
     # Morfolojik işlemleri azalt
     kernel = np.ones((3, 3), np.uint8)
