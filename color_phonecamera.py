@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-ip_address = "192.168.1.55:8080"
+ip_address = "10.103.134.218:8080"
 video_url = f"http://{ip_address}/video"
 
 cap = cv2.VideoCapture(video_url)
