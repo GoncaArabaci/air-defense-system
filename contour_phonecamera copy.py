@@ -11,12 +11,48 @@ def nothing(x):
 cv2.namedWindow("Trackbar", cv2.WINDOW_NORMAL)
 
 # Trackbar'ları oluştur
-cv2.createTrackbar("L-H", "Trackbar", 0, 179, nothing)  
-cv2.createTrackbar("L-S", "Trackbar", 0, 255, nothing)  
-cv2.createTrackbar("L-V", "Trackbar", 0, 255, nothing)  
-cv2.createTrackbar("U-H", "Trackbar", 179, 179, nothing)  
-cv2.createTrackbar("U-S", "Trackbar", 255, 255, nothing)  
-cv2.createTrackbar("U-V", "Trackbar", 255, 255, nothing)  
+cv2.createTrackbar("L-H", "Trackbar", 0, 179, nothing)
+cv2.createTrackbar("L-S", "Trackbar", 0, 255, nothing)
+cv2.createTrackbar("L-V", "Trackbar", 0, 255, nothing)
+cv2.createTrackbar("U-H", "Trackbar", 179, 179, nothing)
+cv2.createTrackbar("U-S", "Trackbar", 255, 255, nothing)
+cv2.createTrackbar("U-V", "Trackbar", 255, 255, nothing)
+
+# Trackbar ayarlarını kaydedebileceğimiz dosya
+settings_file = "settings.txt"
+
+# Trackbar ayarlarını dosyaya kaydetme
+def save_settings():
+    l_h = cv2.getTrackbarPos("L-H", "Trackbar")
+    l_s = cv2.getTrackbarPos("L-S", "Trackbar")
+    l_v = cv2.getTrackbarPos("L-V", "Trackbar")
+    u_h = cv2.getTrackbarPos("U-H", "Trackbar")
+    u_s = cv2.getTrackbarPos("U-S", "Trackbar")
+    u_v = cv2.getTrackbarPos("U-V", "Trackbar")
+    
+    with open(settings_file, 'w') as f:
+        f.write(f"{l_h} {l_s} {l_v} {u_h} {u_s} {u_v}\n")
+
+# Trackbar ayarlarını dosyadan yükleme
+def load_settings():
+    try:
+        with open(settings_file, 'r') as f:
+            settings = f.readline().strip().split()
+            return list(map(int, settings))
+    except FileNotFoundError:
+        return [0,68, 129, 119, 226, 255]  # Varsayılan değerler
+        # return [0,82, 120, 126, 255, 255]
+        
+# Ayarları yükle
+settings = load_settings()
+
+# Trackbar'lara değerleri yükle
+cv2.setTrackbarPos("L-H", "Trackbar", settings[0])
+cv2.setTrackbarPos("L-S", "Trackbar", settings[1])
+cv2.setTrackbarPos("L-V", "Trackbar", settings[2])
+cv2.setTrackbarPos("U-H", "Trackbar", settings[3])
+cv2.setTrackbarPos("U-S", "Trackbar", settings[4])
+cv2.setTrackbarPos("U-V", "Trackbar", settings[5])
 
 cap = cv2.VideoCapture(video_url)
 
@@ -76,8 +112,8 @@ while cap.isOpened():
     cv2.imshow("Telefon Kamerası - IP Webcam", frame_resized)
     cv2.imshow("Maske", mask_resized)
 
-    # cv2.imshow("Telefon Kamerası - IP Webcam", frame)
-    # cv2.imshow("Maske", mask)
+    # Kaydetme işlemi
+    save_settings()
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
